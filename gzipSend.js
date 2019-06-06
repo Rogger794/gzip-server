@@ -1,5 +1,6 @@
 const fs = require('fs');
 const zlib = require('zlib');
+const crypto = require('crypto');
 const http = require('http');
 const path = require('path');
 
@@ -24,6 +25,7 @@ const req = http.request(options, res => {
 
 fs.createReadStream(file)
   .pipe(zlib.createGzip())
+  .pipe(crypto.createCipher('aes192', 'a_shared_secret'))
   .pipe(req)
   .on('finish', () => {
     console.log('File successfully sent');
